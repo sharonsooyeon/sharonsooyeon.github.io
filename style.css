@@ -103,8 +103,8 @@ div.row h4 a {
 
 /* Style all font awesome icons */
 .fa {
-  padding: 10px;
-  width: 45px;
+  padding: 8px;
+  width: 35px;
   text-align: center;
   text-decoration: none;
   border-radius: 50%;
@@ -131,12 +131,12 @@ div.row h4 a {
   color: white;
 }
 
-.fa-youtube {
-  background: #bb0000;
+.fa-github {
+  background: #000000;
   color: white;
 }
 
-.fa-github {
-  background: #000000;
+.fa-envelope {
+  background: #4286f4;
   color: white;
 }
