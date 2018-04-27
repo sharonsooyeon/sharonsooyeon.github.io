@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Sharon Kim and Stacey Kim">
+    <link rel="icon" href="./webpage/icon.png">
+
+    <title>Up House</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./webpage/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./webpage/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+
+      <h1>CS 307 Final Project: Up House</h1>
+      <p class="lead">Sharon Kim and Stacey Kim<br>{sharon.s.kim, stacey.kim}@wellesley.edu</p>
+      <p class="lead">&#8594; <a href="demo.html">Link to demo</a> &#8592; &nbsp;<font color="red" size=3>The page may have to be killed and refreshed once to fully load, and it may take a few seconds.</font></p>
+
+      <p>For our final project, we decided to recreate <a href="http://www.pickchur.com/wp-content/uploads/2011/03/pixar-up-house.png">one of the iconic scenes</a> from Up, the 2009 Pixar film about the adventures of a widowed, elderly man and his young companion.</p>
+
+      <p>Below, we have created an outline of highlights in our project, categorized topically.</p>
+
+      <h3>Hierarchical modeling</h3>
+      <p>Our house is by far the most involved part of the project. Structurally speaking, there are two main parts to the house: the <code>baseBarn</code> and the <code>crossBarn</code>. As their names suggest, they intersect perpendicularly.</p>
+
+      <p>Interestingly, the entire house is at least partially parameterized by the width of the <code>baseBarn</code>, which allows for intuitive positioning and proportionality of appearance throughout. Below, we highlight some interesting aspects of the house code.</p>
+
+      <center><img src="./webpage/bay_structure.png" alt="Front facade" width=50%></center>
+
+      <p></p>
+      <p><strong>Bay structure.</strong> The bay structure is the portion boxed in red above. It was created with a <code>THREE.ExtrudeGeometry</code>. See the code below for more specifics.<pre>
+      	var extrudeSettings = {
+      	  amount: height,
+      	  bevelEnabled: false,
+    	};
+
+    	var pts = [[0.1,0], [0.3,-0.65], [0.7,-0.65], [0.9,0]].map(function(pt) {
+      	  return new THREE.Vector2(pt[0] * width, pt[1] * length);
+    	});
+    	var shape = new THREE.Shape(pts);
+    	var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</pre>
+      
+      <code>pts</code> stores the rough outline of the half-hexagonal shape I want to capture. The <code>map</code> function allows it to be parameterized by the correct <code>width</code> and <code>length</code>, which are inputs to the function. Inputted with <code>extrudeSettings</code> to a <code>THREE.Shape</code>, we get the bay structure pictured above. Voil&agrave;!</p>
+
+      <p><strong>Windows, window panes, doors, stairs, and chimney.</strong> Because these structures have so many box-like structures in common, they are all made using a single <code>Box</code> function with different size parameters. This is a bit mind-boggling considering we have 10 windows, 2 doors, 2 sets of stairs, and many window panes in all.</p>
+
+
+
+      <h3>Material and lighting</h3>
+
+      <p><strong>Material.</strong> Most of our material is made of <code>THREE.MeshPhongMaterial</code>, since we wanted to be sure our house would appropriately interact with the light. However, the material of the background (sky and clouds) is just a <code>THREE.MeshBasicMaterial</code> because we wanted the house to appear as if floating in mid-air. In real life, the substance of the sky does not reflect light like the shiny surface of a car would, for example, so we wanted to make sure that the sky wouldn't interact with any of the light sources in that manner. Using a <code>THREE.MeshBasicMaterial</code> would accomplish this effect.</p>
+
+      <p><strong>Lighting.</strong> We have two light sources in our code. One is a <code>THREE.AmbientLight</code> for general and uniform lighting throughout the scene. The other light source is a <code>THREE.DirectionalLight</code> coming from the sun with reduced intensity so as to not drown out the colors of the house.</p>
+
+
+
+      <h3>Curved surfaces</h3>
+
+      <p>We have two significant uses of Bezier curves and surfaces in our code.</p>
+      <center><img src="./webpage/gable_curve.png" alt="Gable curve on the front facade" width=50%></center>
+
+      <p></p>
+      <p><strong>Gable curve.</strong> The gable curve was created using a combination of <code>THREE.CubicBezierCurve3</code> and <code>THREE.ExtrudeGeometry</code>. However, because texture mapping a geometry of this type proved to be challenging, we were forced to drape a Bezier surface on top of the structure, because we knew this surface's texture mapping mechanism to be simpler and more doable. The structure itself was rendered using the following code:<pre>
+      	var extrudeSettings = {
+      	  amount: length,
+      	  bevelEnabled: false,
+      	}
+
+      	var pts = [[0,1,0], [0.1,0.4,0], [0.4,-0.01,0], [1,0,0]].map(function(pt) {
+      	  return new THREE.Vector3(pt[0] * width, pt[1] * height, 0);
+      	});
+
+      	var curve = new THREE.CubicBezierCurve3(pts[0], pts[1], pts[2], pts[3]);
+      	var points = Array.prototype.concat( curve.getPoints(10), 
+                                           [ new THREE.Vector3(-10,0,0), new THREE.Vector3(-10,height,0) ]);
+      	var shape = new THREE.Shape(points);
+        var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</pre>
+
+      Up until <code>var points</code>, the code is very similar to how the bay structure was created above. So, to explain, the function of <code>points</code> is to ensure that the curve extrudes in the concave direction, as opposed to the convex. So in addition to the outline of the points created by <code>pts</code>, we concatenate two more points to the list of control points that would force the extrusion in the opposite direction. Without this line of code, we would create a convex structure, opposed to a concave one.</p>
+
+      <center><img src="./webpage/balloon_cloud.png" alt="Balloon cloud lifting the house" width=50%></center>
+
+      <p></p>
+      <p><strong>Balloons.</strong> Our contribution to the Balloon part of the code was to make a small but computationally significant adjustment for rendering the balloon cloud. Unfortunately, we cannot take credit for the vast majority this awesome creation, since it was written by our predecessor, Sarah Walters (scroll to the bottom for contact details). But it's cool, so we describe it below.<pre>
+      	var _balloonBezier = new THREE.CubicBezierCurve(
+      	  new THREE.Vector2(-0.05, -0.05),
+      	  new THREE.Vector2(0.35, 0.1),
+      	  new THREE.Vector2(0.8, 0.95),
+      	  new THREE.Vector2(0, 1)
+      	);
+      	var _balloonPoints = _balloonBezier.getPoints(20);
+
+      	var _makeBalloon = function(height) {
+      	  var controlPoints = _balloonPoints.map(function(cp) {
+      	    return cp.multiplyScalar(height);
+      	  });
+      	  var balloonGeometry = new THREE.LatheGeometry(controlPoints, 20);
+      	  var balloonMaterial = new THREE.MeshPhongMaterial({
+      	    color: UTILS.getRandomColor(),
+      	    shininess: PARAMS.balloon.shininess,
+      	    transparent: true,
+      	    opacity: PARAMS.balloon.opacity
+      	  });
+      	  return new THREE.Mesh(balloonGeometry, balloonMaterial);
+      	};</pre>
+
+      The outline of the balloon is drawn with a <code>THREE.CubicBezierCurve</code> and then multiplied by a scalar, the balloon's height, to ensure proportionality. The geometry is a <code>THREE.LatheGeometry</code> to give the balloon its three-dimensional shape. (It's worth noting there's another use of transparency here by setting the <code>transparency</code> and <code>opacity</code> attributes of the balloon.) Then, the balloon is appropriately tilted so that its y-axis lines up with the ribbon it will be attached to later, like so:<pre>
+
+        result.calculateRotation = function() {
+          var deltaY = position.y + PARAMS.ribbon.height;
+          var aRotation = Math.tan(position.z / deltaY);
+          var cRotation = -Math.tan(position.x / deltaY);
+
+          return { a: aRotation, b: 0, c: cRotation };
+        };</pre>
+
+      Making the ribbon is a simple <code>THREE.Line</code>, so I won't paste that here. Generating balloon positions is quite fascinating, though, since Sarah also manages to jitter the balloons so the rendered appearance of the edges of the balloons isn't so jagged.<pre>
+
+        var _generateBalloonPositions = function() {
+          var positions = [];
+          
+          for (var i = -PARAMS.meshRadius; i < PARAMS.meshRadius; i++) {
+            for (var j = -PARAMS.meshRadius; j < PARAMS.meshRadius; j++) {
+              for (var k = -PARAMS.meshRadius; k < PARAMS.meshRadius; k++) {
+                var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));
+                if (distanceFromOrigin <= PARAMS.meshRadius) {
+                  UTILS.callTwice(function() {
+                    positions.push({
+                      x: _jitterMeshPosition(i),
+                      y: _jitterMeshPosition(j),
+                      z: _jitterMeshPosition(k)
+                    });
+                  });
+                }
+              }
+            }
+          }
+          return positions;
+        };</pre>
+
+      Since this is a triple-nested loop, this is definitely the most computationally expensive part of the code. So the higher the <code>meshRadius</code>, which is the upper bound of each for loop, the longer the scene takes to render. The positions of each of the balloons is constrained by the sphere denoted by <code>distanceFromOrigin</code>. This is how the mass of balloons manages to form a circular shape, instead of being rendered across the whole scene willy-nilly.</p>
+
+      <p><strong>Our contribution to the Balloon code.</strong> The change we made was to give the balloon mass a more ovular shape. This would allow us to get away with a sparsely populated balloon cloud (a lower <code>meshRadius</code>), which is computationally cheaper, while still maintaining a convincingly large balloon cloud shape. We did this by considering the equation for an ellipsoid:</p>
+      <center><img src="./webpage/ellipsoid.png" alt="Equation for an ellipsoid" width=22%></center><p></p>
+      <p>Since we want the balloon mass to appear taller and not as spherical, we adjusted the <font style="font-family:times;" size=4><i>b</i></font> value to be 20, which is greater than 1, which is what it was before. We determined this value by looking at the balloon cloud for different combinations of <code>meshRadius</code> and <font style="font-family:times;" size=4><i>b</i></font> values. Since we wanted to stick to a relatively small <code>meshRadius</code>, we settled on the value 5. From there, we determined that the effect of increasing the <font style="font-family:times;" size=4><i>b</i></font> value diminshes considerably when it is around 20, so <font style="font-family:times;" size=4><i>b</i></font> = 20. You can see this in the code pasted above, at: <pre>
+        var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));</pre></p>
+
+
+
+      <h3>Textures and texture-mapping</h3>
+
+      <p>We use a total of 14 different textures in our code for two different purposes.</p>
+
+      <p><strong>Textures for the house.</strong> Most of the loaded textures are solely devoted to texturing the house. Along with meticulous texture mapping, we made sure that the loaded images themselves were reasonably proportioned. For example, all of the colored panels for the walls of the house have around six rows of panels in each .jpg image. Some copy+pasting using pixlr, the online photo editing tool, made this possible. Although we did make efforts on the .jpg scale to make texture mapping in the back-end more tractable, it was challenging and time-consuming to map each of the vertices of our varying structures to each of the vertices of our textures. Unfortunately, we sometimes had to split a function that creates two different but very structurally similar geometries into two because of differing texture coordinates, which didn't make for very clean code. It would be nice if there was a less clunky way of attaching texture coordinates to geometries moving forward.</p>
+
+      <p><strong>Textures for the scenery.</strong> Three of the textures are for setting the scene. For example, the clouds are a screenshot of <a href="http://mrdoob.com/lab/javascript/webgl/clouds/">mr doob's cloud scene</a> transposed on a <code>THREE.PlaneGeometry</code>. This was a reasonable way of creating our background because we didn't want the clouds to be animated, as they were in mr doob's implementation. One of the other textures is for creating the plane, which was similarly implemented. The last texture is for the sun's rays, which we will discuss next.</p>
+
+
+
+      <h3>Transparency</h3>
+      <p>We have three main uses of transparency in our code, but the third we cannot take credit for.</p>
+      <center><img src="./webpage/sun.png" alt="The sun, one of our light sources" width="40%"></center><p></p>
+      <p><strong>Sun's rays.</strong> The sun is surrounded with rays, which is an image downloaded from a Google image search. We transposed this texture onto a completely transparent <code>THREE.PlaneGeometry</code>, so we didn't have to modify the <code>opacity</code> attribute; simply adjusting the <code>transparent</code> attribute to <code>true</code> sufficed. The sun itself is a separate <code>THREE.SphereGeometry</code>, but the sun and its rays have been positioned in the same place to create the effect of the brightly shining sun.</p>
+
+      <p><strong>Airplane.</strong> The second use of transparency is in the airplane. Instead of making our own plane with Three.js objects, we textured an image of a plane on a completely transparent <code>THREE.PlaneGeometry</code>.</p>
+
+      <p><strong>Balloons.</strong> As briefly noted above, each of the balloons has their <code>transparency</code> attribute set to <code>true</code>, and the <code>opacity</code> attribute set to <code>0.7</code>.</p>
+
+
+
+      <h3>Animation</h3>
+      <p>We have two animations in our code.</p>
+
+      <p><strong>Up house.</strong> <a href="https://www.youtube.com/watch?v=N1NLzBGJavc">Like in the movie</a>, the house floats into the skies. This is a simple <code>upHouse.position.y</code>movement upwards. Hopefully Mr. Fredricksen doesn't fly too far above the clouds before he becomes short of breath. :)</p>
+
+      <center><img src="./webpage/plane.png" alt="The plane flying through the sky" width="40%"></center><p></p>
+
+      <p><strong>Airplane.</strong> We add our own contribution to the movie scene here and animate an old-fashioned, Wright brothers-style airplane flying horizontally across the skies. Similarly, this is a simple <code>airplane.position.x</code> movement across the scene.</p>
+
+
+      <h3>Future work</h3>
+      <p>Because the balloon cloud is so computationally expensive and slows down the animation, it would be great if we could come up with a computationally cheaper solution in the future. One idea we had was to create a hollow balloon cloud; balloons are rendered only in the ellipsoid-shaped outline of the cloud. However, we're not sure what kind of an effect this would have on the overall colorfulness of the cloud, since one of the reasons for the its extremely colorful appearance is the transparency of the balloons: the way the partially transparent ballons overlap and interact with each other in the light gives the cloud its colorful appearance. However, this could be a small price to pay for the potential computational inexpensiveness of creating a hollow balloon cloud, which would allow a smoother animation.</p>
+
+
+      <hr>
+
+      <p><font color="gray" size=2.5>Copyright (C) 2017 Sharon Kim, Stacey Kim, {sharon.s.kim, stacey.kim}@wellesley.edu, and Sarah Walters (swalters4925@gmail.com).</p>
+
+      <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+
+      <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+
+      <p>You should have received a copy of the GNU General Public License along with this program. If not, see </font><font size=2.5><a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a></font>.</p>
+
+      <p></p>
+
+    </div> <!-- /container -->
+  </body>
+</html>
