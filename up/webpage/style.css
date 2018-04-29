@@ -11,3 +11,7 @@ hr {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+
+pre {
+  text-indent: 0px;
+}
