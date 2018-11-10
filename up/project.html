@@ -20,8 +20,9 @@
     <div class="container">
 
       <h1>CS 307 Final Project: Up House</h1>
-      <p class="lead">Sharon Kim and Stacey Kim<br>{ sharon.s.kim, stacey.kim }@wellesley.edu</font></p>
-      <p class="lead">&#8594; Links: <a href="demo.html">demo</a>, <a href="https://github.com/sharonsooyeon/Up">code</a> &#8592;</p>
+      <p class="lead">Sharon Kim and Stacey Kim<br>
+        <font face="Consolas">{ sharon.s.kim, stacey.kim }@wellesley.edu</font></p>
+      <p class="lead">&#8594; Links: <a href="demo.html">demo</a>, <a href="https://github.com/sharonsooyeon/Up">code</a> &#8592; <font size="3px" color="red">Note: The demo will take around 30 seconds to render fully, since it is so computationally expensive.</font></p>
 
       <p>For our final project, we decided to recreate <a href="http://www.pickchur.com/wp-content/uploads/2011/03/pixar-up-house.png">one of the iconic scenes</a> from Up, the 2009 Pixar film about the adventures of a widowed, elderly man and his young companion.</p>
 
@@ -35,17 +36,17 @@
       <center><img src="./webpage/bay_structure.png" alt="Front facade" width=50%></center>
 
       <p></p>
-      <p><strong>Bay structure.</strong> The bay structure is the portion boxed in red above. It was created with a <code>THREE.ExtrudeGeometry</code>. See the code below for more specifics.<pre>
-      	var extrudeSettings = {
-      	  amount: height,
-      	  bevelEnabled: false,
-    	};
+      <p><strong>Bay structure.</strong> The bay structure is the portion boxed in red above. It was created with a <code>THREE.ExtrudeGeometry</code>. See the code below for more specifics.
+      <pre><code>var extrudeSettings = {
+  amount: height,
+  bevelEnabled: false,
+};
 
-    	var pts = [[0.1,0], [0.3,-0.65], [0.7,-0.65], [0.9,0]].map(function(pt) {
-      	  return new THREE.Vector2(pt[0] * width, pt[1] * length);
-    	});
-    	var shape = new THREE.Shape(pts);
-    	var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</pre>
+var pts = [[0.1,0], [0.3,-0.65], [0.7,-0.65], [0.9,0]].map(function(pt) {
+  return new THREE.Vector2(pt[0] * width, pt[1] * length);
+});
+var shape = new THREE.Shape(pts);
+var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</code></pre>
       
       <code>pts</code> stores the rough outline of the half-hexagonal shape I want to capture. The <code>map</code> function allows it to be parameterized by the correct <code>width</code> and <code>length</code>, which are inputs to the function. Inputted with <code>extrudeSettings</code> to a <code>THREE.Shape</code>, we get the bay structure pictured above. Voil&agrave;!</p>
 
@@ -67,90 +68,88 @@
       <center><img src="./webpage/gable_curve.png" alt="Gable curve on the front facade" width=50%></center>
 
       <p></p>
-      <p><strong>Gable curve.</strong> The gable curve was created using a combination of <code>THREE.CubicBezierCurve3</code> and <code>THREE.ExtrudeGeometry</code>. However, because texture mapping a geometry of this type proved to be challenging, we were forced to drape a Bezier surface on top of the structure, because we knew this surface's texture mapping mechanism to be simpler and more doable. The structure itself was rendered using the following code:<pre>
-      	var extrudeSettings = {
-      	  amount: length,
-      	  bevelEnabled: false,
-      	}
+      <p><strong>Gable curve.</strong> The gable curve was created using a combination of <code>THREE.CubicBezierCurve3</code> and <code>THREE.ExtrudeGeometry</code>. However, because texture mapping a geometry of this type proved to be challenging, we were forced to drape a Bezier surface on top of the structure, because we knew this surface's texture mapping mechanism to be simpler and more doable. The structure itself was rendered using the following code:
+        <pre>var extrudeSettings = {
+  amount: length,
+  bevelEnabled: false,
+}
 
-      	var pts = [[0,1,0], [0.1,0.4,0], [0.4,-0.01,0], [1,0,0]].map(function(pt) {
-      	  return new THREE.Vector3(pt[0] * width, pt[1] * height, 0);
-      	});
+var pts = [[0,1,0], [0.1,0.4,0], [0.4,-0.01,0], [1,0,0]].map(function(pt) {
+  return new THREE.Vector3(pt[0] * width, pt[1] * height, 0);
+});
 
-      	var curve = new THREE.CubicBezierCurve3(pts[0], pts[1], pts[2], pts[3]);
-      	var points = Array.prototype.concat( curve.getPoints(10), 
-                                           [ new THREE.Vector3(-10,0,0), new THREE.Vector3(-10,height,0) ]);
-      	var shape = new THREE.Shape(points);
-        var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</pre>
+var curve = new THREE.CubicBezierCurve3(pts[0], pts[1], pts[2], pts[3]);
+var points = Array.prototype.concat( curve.getPoints(10), 
+                                   [ new THREE.Vector3(-10,0,0), new THREE.Vector3(-10,height,0) ]);
+var shape = new THREE.Shape(points);
+var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</pre>
 
       Up until <code>var points</code>, the code is very similar to how the bay structure was created above. So, to explain, the function of <code>points</code> is to ensure that the curve extrudes in the concave direction, as opposed to the convex. So in addition to the outline of the points created by <code>pts</code>, we concatenate two more points to the list of control points that would force the extrusion in the opposite direction. Without this line of code, we would create a convex structure, opposed to a concave one.</p>
 
       <center><img src="./webpage/balloon_cloud.png" alt="Balloon cloud lifting the house" width=50%></center>
 
       <p></p>
-      <p><strong>Balloons.</strong> Our contribution to the Balloon part of the code was to make a small but computationally significant adjustment for rendering the balloon cloud. Unfortunately, we cannot take credit for the vast majority this awesome creation, since it was written by our predecessor, Sarah Walters (scroll to the bottom for contact details). But it's cool, so we describe it below.<pre>
-      	var _balloonBezier = new THREE.CubicBezierCurve(
-      	  new THREE.Vector2(-0.05, -0.05),
-      	  new THREE.Vector2(0.35, 0.1),
-      	  new THREE.Vector2(0.8, 0.95),
-      	  new THREE.Vector2(0, 1)
-      	);
-      	var _balloonPoints = _balloonBezier.getPoints(20);
+      <p><strong>Balloons.</strong> Our contribution to the Balloon part of the code was to make a small but computationally significant adjustment for rendering the balloon cloud. Unfortunately, we cannot take credit for the vast majority this awesome creation, since it was written by our predecessor, Sarah Walters (scroll to the bottom for contact details). But it's cool, so we describe it below.
+        <pre>var _balloonBezier = new THREE.CubicBezierCurve(
+  new THREE.Vector2(-0.05, -0.05),
+  new THREE.Vector2(0.35, 0.1),
+  new THREE.Vector2(0.8, 0.95),
+  new THREE.Vector2(0, 1)
+);
+var _balloonPoints = _balloonBezier.getPoints(20);
 
-      	var _makeBalloon = function(height) {
-      	  var controlPoints = _balloonPoints.map(function(cp) {
-      	    return cp.multiplyScalar(height);
-      	  });
-      	  var balloonGeometry = new THREE.LatheGeometry(controlPoints, 20);
-      	  var balloonMaterial = new THREE.MeshPhongMaterial({
-      	    color: UTILS.getRandomColor(),
-      	    shininess: PARAMS.balloon.shininess,
-      	    transparent: true,
-      	    opacity: PARAMS.balloon.opacity
-      	  });
-      	  return new THREE.Mesh(balloonGeometry, balloonMaterial);
-      	};</pre>
+var _makeBalloon = function(height) {
+  var controlPoints = _balloonPoints.map(function(cp) {
+    return cp.multiplyScalar(height);
+  });
+  var balloonGeometry = new THREE.LatheGeometry(controlPoints, 20);
+  var balloonMaterial = new THREE.MeshPhongMaterial({
+    color: UTILS.getRandomColor(),
+    shininess: PARAMS.balloon.shininess,
+    transparent: true,
+    opacity: PARAMS.balloon.opacity
+  });
+  return new THREE.Mesh(balloonGeometry, balloonMaterial);
+};</pre>
 
-      The outline of the balloon is drawn with a <code>THREE.CubicBezierCurve</code> and then multiplied by a scalar, the balloon's height, to ensure proportionality. The geometry is a <code>THREE.LatheGeometry</code> to give the balloon its three-dimensional shape. (It's worth noting there's another use of transparency here by setting the <code>transparency</code> and <code>opacity</code> attributes of the balloon.) Then, the balloon is appropriately tilted so that its y-axis lines up with the ribbon it will be attached to later, like so:<pre>
+      The outline of the balloon is drawn with a <code>THREE.CubicBezierCurve</code> and then multiplied by a scalar, the balloon's height, to ensure proportionality. The geometry is a <code>THREE.LatheGeometry</code> to give the balloon its three-dimensional shape. (It's worth noting there's another use of transparency here by setting the <code>transparency</code> and <code>opacity</code> attributes of the balloon.) Then, the balloon is appropriately tilted so that its y-axis lines up with the ribbon it will be attached to later, like so:
+      <pre>result.calculateRotation = function() {
+  var deltaY = position.y + PARAMS.ribbon.height;
+  var aRotation = Math.tan(position.z / deltaY);
+  var cRotation = -Math.tan(position.x / deltaY);
 
-        result.calculateRotation = function() {
-          var deltaY = position.y + PARAMS.ribbon.height;
-          var aRotation = Math.tan(position.z / deltaY);
-          var cRotation = -Math.tan(position.x / deltaY);
+  return { a: aRotation, b: 0, c: cRotation };
+};</pre>
 
-          return { a: aRotation, b: 0, c: cRotation };
-        };</pre>
-
-      Making the ribbon is a simple <code>THREE.Line</code>, so I won't paste that here. Generating balloon positions is quite fascinating, though, since Sarah also manages to jitter the balloons so the rendered appearance of the edges of the balloons isn't so jagged.<pre>
-
-        var _generateBalloonPositions = function() {
-          var positions = [];
-          
-          for (var i = -PARAMS.meshRadius; i < PARAMS.meshRadius; i++) {
-            for (var j = -PARAMS.meshRadius; j < PARAMS.meshRadius; j++) {
-              for (var k = -PARAMS.meshRadius; k < PARAMS.meshRadius; k++) {
-                var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));
-                if (distanceFromOrigin <= PARAMS.meshRadius) {
-                  UTILS.callTwice(function() {
-                    positions.push({
-                      x: _jitterMeshPosition(i),
-                      y: _jitterMeshPosition(j),
-                      z: _jitterMeshPosition(k)
-                    });
-                  });
-                }
-              }
-            }
-          }
-          return positions;
-        };</pre>
+      Making the ribbon is a simple <code>THREE.Line</code>, so I won't paste that here. Generating balloon positions is quite fascinating, though, since Sarah also manages to jitter the balloons so the rendered appearance of the edges of the balloons isn't so jagged.
+      <pre>var _generateBalloonPositions = function() {
+  var positions = [];
+  
+  for (var i = -PARAMS.meshRadius; i < PARAMS.meshRadius; i++) {
+    for (var j = -PARAMS.meshRadius; j < PARAMS.meshRadius; j++) {
+      for (var k = -PARAMS.meshRadius; k < PARAMS.meshRadius; k++) {
+        var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));
+        if (distanceFromOrigin <= PARAMS.meshRadius) {
+          UTILS.callTwice(function() {
+            positions.push({
+              x: _jitterMeshPosition(i),
+              y: _jitterMeshPosition(j),
+              z: _jitterMeshPosition(k)
+            });
+          });
+        }
+      }
+    }
+  }
+  return positions;
+};</pre>
 
       Since this is a triple-nested loop, this is definitely the most computationally expensive part of the code. So the higher the <code>meshRadius</code>, which is the upper bound of each for loop, the longer the scene takes to render. The positions of each of the balloons is constrained by the sphere denoted by <code>distanceFromOrigin</code>. This is how the mass of balloons manages to form a circular shape, instead of being rendered across the whole scene willy-nilly.</p>
 
       <p><strong>Our contribution to the Balloon code.</strong> The change we made was to give the balloon mass a more ovular shape. This would allow us to get away with a sparsely populated balloon cloud (a lower <code>meshRadius</code>), which is computationally cheaper, while still maintaining a convincingly large balloon cloud shape. We did this by considering the equation for an ellipsoid:</p>
       <center><img src="./webpage/ellipsoid.png" alt="Equation for an ellipsoid" width=22%></center><p></p>
-      <p>Since we want the balloon mass to appear taller and not as spherical, we adjusted the <font style="font-family:times;" size=4><i>b</i></font> value to be 20, which is greater than 1, which is what it was before. We determined this value by looking at the balloon cloud for different combinations of <code>meshRadius</code> and <font style="font-family:times;" size=4><i>b</i></font> values. Since we wanted to stick to a relatively small <code>meshRadius</code>, we settled on the value 5. From there, we determined that the effect of increasing the <font style="font-family:times;" size=4><i>b</i></font> value diminshes considerably when it is around 20, so <font style="font-family:times;" size=4><i>b</i></font> = 20. You can see this in the code pasted above, at: <pre>
-        var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));</pre></p>
+      <p>Since we want the balloon mass to appear taller and not as spherical, we adjusted the <font style="font-family:times;" size=4><i>b</i></font> value to be 20, which is greater than 1, which is what it was before. We determined this value by looking at the balloon cloud for different combinations of <code>meshRadius</code> and <font style="font-family:times;" size=4><i>b</i></font> values. Since we wanted to stick to a relatively small <code>meshRadius</code>, we settled on the value 5. From there, we determined that the effect of increasing the <font style="font-family:times;" size=4><i>b</i></font> value diminshes considerably when it is around 20, so <font style="font-family:times;" size=4><i>b</i></font> = 20. You can see this in the code pasted above, at:
+        <pre>var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));</pre></p>
 
 
 
