@@ -2,22 +2,61 @@
 body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.6) 100%), url('hands.png');
 }
 
-img {
-  border-radius: 50%;
-  width: 23%;
-  float: left;
-  padding-right: 23px;
-  padding-top: 18px;
+nav ul li a {
+  color: #9b3f52;
+}
+
+nav ul li a:hover {
+  color: #bc2341;
+}
+
+ul.nav {
+  color: #9b3f52;
+}
+
+.float-right .nav-item a.active {
+  background-color: #9b3f52;
+}
+
+h1 {
+  font-family: 'Cabin Sketch', serif;
 }
 
 h2 {
   padding-bottom: 15px;
+  font-family: 'Cabin Sketch', serif;
+}
+
+p a {
+  color: #4278a5;
+}
+
+p a:hover {
+  color: #0059a3;
+}
+
+img.my-photo {
+  border-radius: 50%;
+  width: 22%;
+  float: left;
+  margin: 7px 20px 0 0;
+}
+
+div.me {
+  padding: 0 0 15px 0;
 }
 
 div.row h4 a {
-  color: #3F729B;
+  color: #9b3f52;
+}
+
+.row .music-and-leadership-content {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .lead a:hover {
@@ -44,8 +83,9 @@ div.row h4 a {
 /* Custom page header */
 .header {
   padding-bottom: 1rem;
-  border-bottom: .05rem solid #e5e5e5;
+  border-bottom: .05rem solid #b5b5b5;
 }
+
 
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -58,7 +98,7 @@ div.row h4 a {
 .footer {
   padding-top: 1.5rem;
   color: #777;
-  border-top: .05rem solid #e5e5e5;
+  border-top: .05rem solid #b5b5b5;
 }
 
 /* Customize container */
@@ -69,16 +109,6 @@ div.row h4 a {
 }
 .container-narrow > hr {
   margin: 2rem 0;
-}
-
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: .05rem solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: .75rem 1.5rem;
-  font-size: 1.5rem;
 }
 
 /* Supporting marketing content */
