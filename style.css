@@ -31,6 +31,10 @@ h2 {
   font-family: 'Cabin Sketch', serif;
 }
 
+h4 {
+	font-family: 'Crimson Text', strong;
+}
+
 p a {
   color: #4278a5;
 }
