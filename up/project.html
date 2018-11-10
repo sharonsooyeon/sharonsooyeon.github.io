@@ -22,9 +22,9 @@
       <h1>CS 307 Final Project: Up House</h1>
       <p class="lead">Sharon Kim and Stacey Kim<br>
         <font face="Consolas">{ sharon.s.kim, stacey.kim }@wellesley.edu</font></p>
-      <p class="lead">&#8594; Links: <a href="demo.html">demo</a>, <a href="https://github.com/sharonsooyeon/Up">code</a> &#8592; <font size="3px" color="red">Note: The demo will take around 30 seconds to render fully, since it is so computationally expensive.</font></p>
+      <p class="lead">&#8594; Links: <a href="demo.html" target="blank">demo</a>, <a href="https://github.com/sharonsooyeon/Up" target="blank">code</a> &#8592; <font size="3px" color="red">Note: The demo will take around 30 seconds to render fully, since it is so computationally expensive.</font></p>
 
-      <p>For our final project, we decided to recreate <a href="http://www.pickchur.com/wp-content/uploads/2011/03/pixar-up-house.png">one of the iconic scenes</a> from Up, the 2009 Pixar film about the adventures of a widowed, elderly man and his young companion.</p>
+      <p>For our final project, we decided to recreate <a href="http://www.pickchur.com/wp-content/uploads/2011/03/pixar-up-house.png" target="blank">one of the iconic scenes</a> from Up, the 2009 Pixar film about the adventures of a widowed, elderly man and his young companion.</p>
 
       <p>Below, we have created an outline of highlights in our project, categorized topically.</p>
 
@@ -159,7 +159,7 @@ var _makeBalloon = function(height) {
 
       <p><strong>Textures for the house.</strong> Most of the loaded textures are solely devoted to texturing the house. Along with meticulous texture mapping, we made sure that the loaded images themselves were reasonably proportioned. For example, all of the colored panels for the walls of the house have around six rows of panels in each .jpg image. Some copy+pasting using pixlr, the online photo editing tool, made this possible. Although we did make efforts on the .jpg scale to make texture mapping in the back-end more tractable, it was challenging and time-consuming to map each of the vertices of our varying structures to each of the vertices of our textures. Unfortunately, we sometimes had to split a function that creates two different but very structurally similar geometries into two because of differing texture coordinates, which didn't make for very clean code. It would be nice if there was a less clunky way of attaching texture coordinates to geometries moving forward.</p>
 
-      <p><strong>Textures for the scenery.</strong> Three of the textures are for setting the scene. For example, the clouds are a screenshot of <a href="http://mrdoob.com/lab/javascript/webgl/clouds/">mr doob's cloud scene</a> transposed on a <code>THREE.PlaneGeometry</code>. This was a reasonable way of creating our background because we didn't want the clouds to be animated, as they were in mr doob's implementation. One of the other textures is for creating the plane, which was similarly implemented. The last texture is for the sun's rays, which we will discuss next.</p>
+      <p><strong>Textures for the scenery.</strong> Three of the textures are for setting the scene. For example, the clouds are a screenshot of <a href="http://mrdoob.com/lab/javascript/webgl/clouds/" target="blank">mr doob's cloud scene</a> transposed on a <code>THREE.PlaneGeometry</code>. This was a reasonable way of creating our background because we didn't want the clouds to be animated, as they were in mr doob's implementation. One of the other textures is for creating the plane, which was similarly implemented. The last texture is for the sun's rays, which we will discuss next.</p>
 
 
 
@@ -177,7 +177,7 @@ var _makeBalloon = function(height) {
       <h3>Animation</h3>
       <p>We have two animations in our code.</p>
 
-      <p><strong>Up house.</strong> <a href="https://www.youtube.com/watch?v=N1NLzBGJavc">Like in the movie</a>, the house floats into the skies. This is a simple <code>upHouse.position.y</code>movement upwards. Hopefully Mr. Fredricksen doesn't fly too far above the clouds before he becomes short of breath. :)</p>
+      <p><strong>Up house.</strong> <a href="https://www.youtube.com/watch?v=N1NLzBGJavc" target="blank">Like in the movie</a>, the house floats into the skies. This is a simple <code>upHouse.position.y</code>movement upwards. Hopefully Mr. Fredricksen doesn't fly too far above the clouds before he becomes short of breath. :)</p>
 
       <center><img src="./webpage/plane.png" alt="The plane flying through the sky" width="40%"></center><p></p>
 
@@ -196,7 +196,7 @@ var _makeBalloon = function(height) {
 
       <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
 
-      <p>You should have received a copy of the GNU General Public License along with this program. If not, see </font><font size=2.5><a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a></font>.</p>
+      <p>You should have received a copy of the GNU General Public License along with this program. If not, see </font><font size=2.5><a href="http://www.gnu.org/licenses/" target="blank">http://www.gnu.org/licenses/</a></font>.</p>
 
       <p></p>
 
