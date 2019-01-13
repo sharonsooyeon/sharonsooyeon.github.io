@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="./webpage/s.png">
+    <link rel="icon" href="./s.png">
 
     <title>Examining Polarization on Twitter</title>
 
@@ -15,12 +15,12 @@
     <!-- Custom styles for this template -->
     <link href="./style.css" rel="stylesheet">
 
-    <script src="./jquery-3.3.1.min.js"></script>
-    <script>
-      $(function() {
-        $("#laurenduca").load("./laurenduca-visualization.html")
+    <script src="./jquery.min.js"></script>
+    <script> 
+      $(function(){
+        $("#laurenduca").load("https://sharonsooyeon.github.io/twitter_polarization/laurenduca-visualization.html"); 
       });
-    </script>
+    </script> 
   </head>
 
   <body>
@@ -34,20 +34,17 @@
 
       <p>You can read the final paper <a href="./final_paper.pdf">here</a>.</p>
 
-      <h3>Lauren Duca</h3>
+      <h3>Visualizations</h3>
+      <p>Due to the CORS policy, I wasn&rsquo;t able to embed the html files here. I used the <code>pyLDAvis</code> package to generate the visualizations.</p>
+      <ul>
+        <li><a href="./laurenduca-visualization.html">Lauren Duca</a></li>
+        <li><a href="./lkherman-visualization.html">Lily Herman</a></li>
+        <li><a href="./tomilahren-visualization.html">Tomi Lahren</a></li>
+      </ul>
 
-      <div id="laurenduca"></div>
-      <p>Our house is by far the most involved part of the project. Structurally speaking, there are two main parts to the house: the <code>baseBarn</code> and the <code>crossBarn</code>. As their names suggest, they intersect perpendicularly.</p>
+      <h3>Data scraping</h3>
+      <p>I used <a href="./data_collection.py">this script</a> to scrape the twitter data of these three journalists. I used <code>BeautifulSoup</code> to explore the DOM and <code>Selenium</code> to automate the browsing process of scrolling through and clicking on each tweet.</p>
 
-
-      <h3>Material and lighting</h3>
-
-      <p><strong>Material.</strong> Most of our material is made of <code>THREE.MeshPhongMaterial</code>, since we wanted to be sure our house would appropriately interact with the light. However, the material of the background (sky and clouds) is just a <code>THREE.MeshBasicMaterial</code> because we wanted the house to appear as if floating in mid-air. In real life, the substance of the sky does not reflect light like the shiny surface of a car would, for example, so we wanted to make sure that the sky wouldn't interact with any of the light sources in that manner. Using a <code>THREE.MeshBasicMaterial</code> would accomplish this effect.</p>
-
-      <h3>Curved surfaces</h3>
-
-
-      <hr>
 
     </div> <!-- /container -->
   </body>
