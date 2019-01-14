@@ -56,7 +56,7 @@ var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</code></pre>
 
       <h3>Material and lighting</h3>
 
-      <p><strong>Material.</strong> Most of our material is made of <code>THREE.MeshPhongMaterial</code>, since we wanted to be sure our house would appropriately interact with the light. However, the material of the background (sky and clouds) is just a <code>THREE.MeshBasicMaterial</code> because we wanted the house to appear as if floating in mid-air. In real life, the substance of the sky does not reflect light like the shiny surface of a car would, for example, so we wanted to make sure that the sky wouldn't interact with any of the light sources in that manner. Using a <code>THREE.MeshBasicMaterial</code> would accomplish this effect.</p>
+      <p><strong>Material.</strong> Most of our material is made of <code>THREE.MeshPhongMaterial</code>, since we wanted to be sure our house would appropriately interact with the light. However, the material of the background (sky and clouds) is just a <code>THREE.MeshBasicMaterial</code> because we wanted the house to appear as if floating in mid-air. In real life, the substance of the sky does not reflect light like the shiny surface of a car would, for example, so we wanted to make sure that the sky wouldn&rsquo;t interact with any of the light sources in that manner. Using a <code>THREE.MeshBasicMaterial</code> would accomplish this effect.</p>
 
       <p><strong>Lighting.</strong> We have two light sources in our code. One is a <code>THREE.AmbientLight</code> for general and uniform lighting throughout the scene. The other light source is a <code>THREE.DirectionalLight</code> coming from the sun with reduced intensity so as to not drown out the colors of the house.</p>
 
@@ -68,7 +68,7 @@ var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);</code></pre>
       <center><img src="./webpage/gable_curve.png" alt="Gable curve on the front facade" width=50%></center>
 
       <p></p>
-      <p><strong>Gable curve.</strong> The gable curve was created using a combination of <code>THREE.CubicBezierCurve3</code> and <code>THREE.ExtrudeGeometry</code>. However, because texture mapping a geometry of this type proved to be challenging, we were forced to drape a Bezier surface on top of the structure, because we knew this surface's texture mapping mechanism to be simpler and more doable. The structure itself was rendered using the following code:
+      <p><strong>Gable curve.</strong> The gable curve was created using a combination of <code>THREE.CubicBezierCurve3</code> and <code>THREE.ExtrudeGeometry</code>. However, because texture mapping a geometry of this type proved to be challenging, we were forced to drape a Bezier surface on top of the structure, because we knew this surface&rsquo;s texture mapping mechanism to be simpler and more doable. The structure itself was rendered using the following code:
         <pre>var extrudeSettings = {
   amount: length,
   bevelEnabled: false,
@@ -112,7 +112,7 @@ var _makeBalloon = function(height) {
   return new THREE.Mesh(balloonGeometry, balloonMaterial);
 };</pre>
 
-      The outline of the balloon is drawn with a <code>THREE.CubicBezierCurve</code> and then multiplied by a scalar, the balloon's height, to ensure proportionality. The geometry is a <code>THREE.LatheGeometry</code> to give the balloon its three-dimensional shape. (It's worth noting there's another use of transparency here by setting the <code>transparency</code> and <code>opacity</code> attributes of the balloon.) Then, the balloon is appropriately tilted so that its y-axis lines up with the ribbon it will be attached to later, like so:
+      The outline of the balloon is drawn with a <code>THREE.CubicBezierCurve</code> and then multiplied by a scalar, the balloon&rsquo;s height, to ensure proportionality. The geometry is a <code>THREE.LatheGeometry</code> to give the balloon its three-dimensional shape. (It&rsquo;s worth noting there&rsquo;s another use of transparency here by setting the <code>transparency</code> and <code>opacity</code> attributes of the balloon.) Then, the balloon is appropriately tilted so that its y-axis lines up with the ribbon it will be attached to later, like so:
       <pre>result.calculateRotation = function() {
   var deltaY = position.y + PARAMS.ribbon.height;
   var aRotation = Math.tan(position.z / deltaY);
@@ -121,7 +121,7 @@ var _makeBalloon = function(height) {
   return { a: aRotation, b: 0, c: cRotation };
 };</pre>
 
-      Making the ribbon is a simple <code>THREE.Line</code>, so I won't paste that here. Generating balloon positions is quite fascinating, though, since Sarah also manages to jitter the balloons so the rendered appearance of the edges of the balloons isn't so jagged.
+      Making the ribbon is a simple <code>THREE.Line</code>, so I won&rsquo;t paste that here. Generating balloon positions is quite fascinating, though, since the balloons are also jittered, so that the rendered appearance of the edges of the balloons isn&rsquo;t so jagged.
       <pre>var _generateBalloonPositions = function() {
   var positions = [];
   
@@ -146,8 +146,8 @@ var _makeBalloon = function(height) {
 
       Since this is a triple-nested loop, this is definitely the most computationally expensive part of the code. So the higher the <code>meshRadius</code>, which is the upper bound of each for loop, the longer the scene takes to render. The positions of each of the balloons is constrained by the sphere denoted by <code>distanceFromOrigin</code>. This is how the mass of balloons manages to form a circular shape, instead of being rendered across the whole scene willy-nilly.</p>
 
-      <p><strong>Our contribution to the Balloon code.</strong> The change we made was to give the balloon mass a more ovular shape. This would allow us to get away with a sparsely populated balloon cloud (a lower <code>meshRadius</code>), which is computationally cheaper, while still maintaining a convincingly large balloon cloud shape. We did this by considering the equation for an ellipsoid:</p>
-      <center><img src="./webpage/ellipsoid.png" alt="Equation for an ellipsoid" width=22%></center><p></p>
+      <p><strong>Our main contribution to the Balloon code.</strong> The change we made was to give the balloon mass a more ovular shape. This would allow us to get away with a sparsely populated balloon cloud (a lower <code>meshRadius</code>), which is computationally cheaper, while still maintaining a convincingly large balloon cloud shape. We did this by considering the equation for an ellipsoid:</p>
+      <center><img src="./webpage/ellipsoid.png" alt="Equation for an ellipsoid" width=20%></center><p></p>
       <p>Since we want the balloon mass to appear taller and not as spherical, we adjusted the <font style="font-family:times;" size=4><i>b</i></font> value to be 20, which is greater than 1, which is what it was before. We determined this value by looking at the balloon cloud for different combinations of <code>meshRadius</code> and <font style="font-family:times;" size=4><i>b</i></font> values. Since we wanted to stick to a relatively small <code>meshRadius</code>, we settled on the value 5. From there, we determined that the effect of increasing the <font style="font-family:times;" size=4><i>b</i></font> value diminshes considerably when it is around 20, so <font style="font-family:times;" size=4><i>b</i></font> = 20. You can see this in the code pasted above, at:
         <pre>var distanceFromOrigin = Math.sqrt(Math.pow(i, 2) + (Math.pow(j, 2) / 20) + Math.pow(k, 2));</pre></p>
 
@@ -157,16 +157,16 @@ var _makeBalloon = function(height) {
 
       <p>We use a total of 14 different textures in our code for two different purposes.</p>
 
-      <p><strong>Textures for the house.</strong> Most of the loaded textures are solely devoted to texturing the house. Along with meticulous texture mapping, we made sure that the loaded images themselves were reasonably proportioned. For example, all of the colored panels for the walls of the house have around six rows of panels in each .jpg image. Some copy+pasting using pixlr, the online photo editing tool, made this possible. Although we did make efforts on the .jpg scale to make texture mapping in the back-end more tractable, it was challenging and time-consuming to map each of the vertices of our varying structures to each of the vertices of our textures. Unfortunately, we sometimes had to split a function that creates two different but very structurally similar geometries into two because of differing texture coordinates, which didn't make for very clean code. It would be nice if there was a less clunky way of attaching texture coordinates to geometries moving forward.</p>
+      <p><strong>Textures for the house.</strong> Most of the loaded textures are solely devoted to texturing the house. Along with meticulous texture mapping, we made sure that the loaded images themselves were reasonably proportioned. For example, all of the colored panels for the walls of the house have around six rows of panels in each .jpg image. Some copy+pasting using pixlr, the online photo editing tool, made this possible. Although we did make efforts on the .jpg scale to make texture mapping in the back-end more tractable, it was challenging and time-consuming to map each of the vertices of our varying structures to each of the vertices of our textures. Unfortunately, we sometimes had to split a function that creates two different but very structurally similar geometries into two because of differing texture coordinates, which didn&rsquo;t make for very clean code. It would be nice if there was a less clunky way of attaching texture coordinates to geometries moving forward.</p>
 
-      <p><strong>Textures for the scenery.</strong> Three of the textures are for setting the scene. For example, the clouds are a screenshot of <a href="http://mrdoob.com/lab/javascript/webgl/clouds/" target="blank">mr doob's cloud scene</a> transposed on a <code>THREE.PlaneGeometry</code>. This was a reasonable way of creating our background because we didn't want the clouds to be animated, as they were in mr doob's implementation. One of the other textures is for creating the plane, which was similarly implemented. The last texture is for the sun's rays, which we will discuss next.</p>
+      <p><strong>Textures for the scenery.</strong> Three of the textures are for setting the scene. For example, the clouds are a screenshot of <a href="http://mrdoob.com/lab/javascript/webgl/clouds/" target="blank">mr doob&rsquo;s cloud scene</a> transposed on a <code>THREE.PlaneGeometry</code>. This was a reasonable way of creating our background because we didn&rsquo;t want the clouds to be animated, as they were in mr doob&rsquo;s implementation. One of the other textures is for creating the plane, which was similarly implemented. The last texture is for the sun&rsquo;s rays, which we will discuss next.</p>
 
 
 
       <h3>Transparency</h3>
-      <p>We have three main uses of transparency in our code, but the third we cannot take credit for.</p>
+      <p>We have three main uses of transparency in our code.</p>
       <center><img src="./webpage/sun.png" alt="The sun, one of our light sources" width="40%"></center><p></p>
-      <p><strong>Sun's rays.</strong> The sun is surrounded with rays, which is an image downloaded from a Google image search. We transposed this texture onto a completely transparent <code>THREE.PlaneGeometry</code>, so we didn't have to modify the <code>opacity</code> attribute; simply adjusting the <code>transparent</code> attribute to <code>true</code> sufficed. The sun itself is a separate <code>THREE.SphereGeometry</code>, but the sun and its rays have been positioned in the same place to create the effect of the brightly shining sun.</p>
+      <p><strong>Sun&rsquo;s rays.</strong> The sun is surrounded with rays, which is an image downloaded from a Google image search. We transposed this texture onto a completely transparent <code>THREE.PlaneGeometry</code>, so we didn&rsquo;t have to modify the <code>opacity</code> attribute; simply adjusting the <code>transparent</code> attribute to <code>true</code> sufficed. The sun itself is a separate <code>THREE.SphereGeometry</code>, but the sun and its rays have been positioned in the same place to create the effect of the brightly shining sun.</p>
 
       <p><strong>Airplane.</strong> The second use of transparency is in the airplane. Instead of making our own plane with Three.js objects, we textured an image of a plane on a completely transparent <code>THREE.PlaneGeometry</code>.</p>
 
@@ -177,7 +177,7 @@ var _makeBalloon = function(height) {
       <h3>Animation</h3>
       <p>We have two animations in our code.</p>
 
-      <p><strong>Up house.</strong> <a href="https://www.youtube.com/watch?v=N1NLzBGJavc" target="blank">Like in the movie</a>, the house floats into the skies. This is a simple <code>upHouse.position.y</code>movement upwards. Hopefully Mr. Fredricksen doesn't fly too far above the clouds before he becomes short of breath. :)</p>
+      <p><strong>Up house.</strong> <a href="https://www.youtube.com/watch?v=N1NLzBGJavc" target="blank">Like in the movie</a>, the house floats into the skies. This is a simple <code>upHouse.position.y</code> movement upwards. Hopefully Mr. Fredricksen doesn&rsquo;t fly too far above the clouds before he becomes short of breath. :)</p>
 
       <center><img src="./webpage/plane.png" alt="The plane flying through the sky" width="40%"></center><p></p>
 
@@ -185,7 +185,7 @@ var _makeBalloon = function(height) {
 
 
       <h3>Future work</h3>
-      <p>Because the balloon cloud is so computationally expensive and slows down the animation, it would be great if we could come up with a computationally cheaper solution in the future. One idea we had was to create a hollow balloon cloud; balloons are rendered only in the ellipsoid-shaped outline of the cloud. However, we're not sure what kind of an effect this would have on the overall colorfulness of the cloud, since one of the reasons for the its extremely colorful appearance is the transparency of the balloons: the way the partially transparent ballons overlap and interact with each other in the light gives the cloud its colorful appearance. However, this could be a small price to pay for the potential computational inexpensiveness of creating a hollow balloon cloud, which would allow a smoother animation.</p>
+      <p>Because the balloon cloud is so computationally expensive and slows down the animation, it would be great if we could come up with a computationally cheaper solution in the future. One idea we had was to create a hollow balloon cloud; balloons are rendered only in the ellipsoid-shaped outline of the cloud. However, we&rsquo;re not sure what kind of an effect this would have on the overall colorfulness of the cloud, since one of the reasons for the its extremely colorful appearance is the transparency of the balloons: the way the partially transparent ballons overlap and interact with each other in the light gives the cloud its colorful appearance. Maybe this would be a small price to pay for the potential computational inexpensiveness of creating a hollow balloon cloud, which would allow a smoother animation.</p>
 
 
       <hr>
