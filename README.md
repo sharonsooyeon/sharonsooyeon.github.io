@@ -1,3 +1,3 @@
-# sharonsooyeon.github.io
+# https://sharonsooyeon.github.io
 
 Repository for my personal webpage.
