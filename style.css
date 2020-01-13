@@ -2,38 +2,39 @@
 body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%,
-    rgba(255,255,255,0.6) 100%), url('hands.png');
 }
 
 nav ul li a {
-  color: #9b3f52;
+  color: #3f599b;
 }
 
 nav ul li a:hover {
-  color: #bc2341;
+  color: #305ac7;
 }
 
 ul.nav {
-  color: #9b3f52;
+  color: #3f599b;
 }
 
 .float-right .nav-item a.active {
-  background-color: #9b3f52;
+  background-color: #3f599b;
 }
 
 h1 {
-  font-family: 'Cabin Sketch', serif;
+  font-size: 3rem !important;
+  font-family: 'Roboto Mono', serif;
 }
 
 h2 {
   padding-bottom: 15px;
-  font-family: 'Cabin Sketch', serif;
+  font-family: 'Open Sans', serif;
+  font-size: 22pt;
 }
 
 h4 {
-	font-family: 'Crimson Text', strong;
-  color: #9b3f52;
+	font-family: 'Roboto Mono', strong;
+  font-size: 16pt;
+  color: #616161;
 }
 
 p a {
@@ -44,24 +45,37 @@ p a:hover {
   color: #0059a3;
 }
 
-img.my-photo {
+p code {
+  color: #616161;
+}
+
+.my-photo {
   border-radius: 50%;
   width: 22%;
   float: left;
-  margin: 20px 20px 0 0;
+  margin-right: 20px;
 }
 
-div.me {
-  padding: 0 0 15px 0;
+.about-me {
+  padding-bottom: 15px;
 }
 
 div.row h4 a {
-  color: #9b3f52;
+  color: #616161;
 }
 
-.row .music-and-leadership-content {
+.row .tech-law-policy {
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.row .music-and-leadership {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.row .music-and-leadership a:hover {
+  text-decoration: none;
 }
 
 .lead a:hover {
@@ -107,9 +121,9 @@ div.row h4 a {
 }
 
 /* Customize container */
-@media (min-width: 48em) {
+@media (min-width: 64em) {
   .container {
-    max-width: 46rem;
+    max-width: 62rem;
   }
 }
 .container-narrow > hr {
