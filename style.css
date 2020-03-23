@@ -164,6 +164,19 @@ div.row h4 a {
   }
 }
 
+/* Responsive: Biggest phones and down */
+@media only screen and (max-width: 71.25em) {
+  
+  .about-me {
+    margin-top: 2rem;
+  }
+
+  .my-description h1 {
+    font-size: 2.2rem !important;
+  }
+}
+
+
 
 /* SOCIAL MEDIA BUTTONS
 -------------------------------------------------- */
