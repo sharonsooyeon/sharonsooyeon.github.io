@@ -53,7 +53,7 @@ p code {
   border-radius: 50%;
   width: 22%;
   float: left;
-  margin: 15px 20px 0 0;
+  margin-right: 30px;
 }
 
 .about-me {
@@ -65,6 +65,11 @@ div.row h4 a {
 }
 
 .row .tech-law-policy {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.row .relevant-projects {
   margin-left: 0px;
   margin-right: 0px;
 }
