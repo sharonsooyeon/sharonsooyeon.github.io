@@ -26,9 +26,15 @@ h1 {
 }
 
 h2 {
-  padding-bottom: 15px;
-  font-family: 'Open Sans', serif;
-  font-size: 22pt;
+  font-family: 'Roboto Mono', serif;
+}
+
+h2 > a {
+  color: #212529;
+}
+
+.body {
+  margin-bottom: 40px;
 }
 
 h4 {
